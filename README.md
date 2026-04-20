@@ -7,12 +7,12 @@
 **AI-First Student Engagement Ecosystem for Education Discovery & Financing**
 
 [![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Now-4a7c6f?style=for-the-badge)](https://gradpath-ai.vercel.app)
-[![Tech Stack](https://img.shields.io/badge/Stack-React_+_Node_+_Groq-c4935a?style=for-the-badge)]()
-[![AI Powered](https://img.shields.io/badge/AI-Llama_3.3_70B-5a9a88?style=for-the-badge)]()
+![Tech Stack](https://img.shields.io/badge/Stack-React_+_Node_+_Groq-c4935a?style=for-the-badge)
+![AI Powered](https://img.shields.io/badge/AI-Llama_3.3_70B-5a9a88?style=for-the-badge)
 
 ---
 
-*A hackathon-winning AI-powered platform that guides Indian students through university discovery, application planning, and education loan financing — with 4 specialized AI agents and a gamified Dream Score system.*
+*An AI-powered platform that guides Indian students through university discovery, application planning, and education loan financing — with 4 specialized AI agents and a gamified Dream Score system.*
 
 </div>
 
@@ -209,9 +209,5 @@ Open [http://localhost:5173](http://localhost:5173)
 ### Built with 🤖 AI-first thinking for the future of education
 
 **GradPath AI** — Awareness → Engagement → Trust → Conversion
-
----
-
-*Made for TenzorX Hackathon 2025*
 
 </div>
