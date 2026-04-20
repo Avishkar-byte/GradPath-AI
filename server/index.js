@@ -13,7 +13,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// CORS - allow Vercel frontend
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    /\.vercel\.app$/,
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Routes
@@ -29,6 +39,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.listen(PORT, () => {
+// Root
+app.get('/', (req, res) => {
+  res.json({ name: 'GradPath AI API', version: '1.0.0', status: 'running' });
+});
+
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 GradPath AI server running on port ${PORT}`);
 });
