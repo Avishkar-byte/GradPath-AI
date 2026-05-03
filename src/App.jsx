@@ -6,6 +6,9 @@ import Quiz from './pages/Quiz'
 import Dashboard from './pages/Dashboard'
 import PathFinder from './pages/PathFinder'
 import LoanOracle from './pages/LoanOracle'
+import LoanConfirmation from './pages/LoanConfirmation'
+import ScoreBooster from './pages/ScoreBooster'
+import GrowthEngineRoom from './pages/GrowthEngineRoom'
 import ROICalculator from './pages/ROICalculator'
 import Timeline from './pages/Timeline'
 
@@ -39,6 +42,9 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/pathfinder" element={<PathFinder />} />
         <Route path="/loans" element={<LoanOracle />} />
+        <Route path="/loan-confirmation" element={<LoanConfirmation />} />
+        <Route path="/scorebooster" element={<ScoreBooster />} />
+        <Route path="/growth" element={<GrowthEngineRoom />} />
         <Route path="/roi" element={<ROICalculator />} />
         <Route path="/timeline" element={<Timeline />} />
       </Routes>

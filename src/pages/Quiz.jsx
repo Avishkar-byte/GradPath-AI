@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../App';
 import { api } from '../utils/api';
+import AgentOrchestration from '../components/AgentOrchestration';
 import './Quiz.css';
 
 const STEPS = [
@@ -94,7 +95,8 @@ export default function Quiz() {
     courseType: 'ms',
   });
   const [loading, setLoading] = useState(false);
-  const { setUserData, setDreamScore } = useContext(AppContext);
+  const [showOrchestration, setShowOrchestration] = useState(false);
+  const { setUserData, setDreamScore, dreamScore } = useContext(AppContext);
   const navigate = useNavigate();
 
   const step = STEPS[currentStep];
@@ -134,10 +136,11 @@ export default function Quiz() {
       setDreamScore(result);
       localStorage.setItem('gradpath_user', JSON.stringify(formData));
       localStorage.setItem('gradpath_score', JSON.stringify(result));
-      navigate('/dashboard');
+      // Show agent orchestration instead of direct navigate
+      setShowOrchestration(true);
     } catch (error) {
       console.error('Score calculation error:', error);
-      // Fallback: navigate anyway with simulated score
+      // Fallback: navigate anyway
       navigate('/dashboard');
     } finally {
       setLoading(false);
@@ -217,6 +220,12 @@ export default function Quiz() {
 
   return (
     <div className="page quiz-page">
+      {showOrchestration && (
+        <AgentOrchestration
+          dreamScore={dreamScore}
+          onComplete={() => setShowOrchestration(false)}
+        />
+      )}
       <div className="container">
         <div className="quiz-wrapper animate-fade-in">
           {/* Progress */}

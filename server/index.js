@@ -7,6 +7,7 @@ import loanOracleRoutes from './routes/loanOracle.js';
 import roiCalculatorRoutes from './routes/roiCalculator.js';
 import timelineRoutes from './routes/timeline.js';
 import growthEngineRoutes from './routes/growthEngine.js';
+import scoreBoosterRoutes from './routes/scoreBooster.js';
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use('/api/loan-oracle', loanOracleRoutes);
 app.use('/api/roi', roiCalculatorRoutes);
 app.use('/api/timeline', timelineRoutes);
 app.use('/api/growth', growthEngineRoutes);
+app.use('/api/score-booster', scoreBoosterRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

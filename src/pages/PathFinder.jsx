@@ -18,6 +18,9 @@ export default function PathFinder() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [expandedCard, setExpandedCard] = useState(null);
+  const [explainCache, setExplainCache] = useState({});
+  const [loadingExplain, setLoadingExplain] = useState(null);
 
   const countries = ['USA', 'UK', 'Canada', 'Germany', 'Australia', 'Singapore', 'Switzerland', 'Netherlands', 'Sweden', 'France', 'India'];
 
@@ -182,6 +185,60 @@ export default function PathFinder() {
                     </span>
                     {uni.scholarship && <span className="tag tag-amber" style={{ fontSize: '0.72rem' }}>💰 Scholarship</span>}
                   </div>
+
+                  {/* Why this match? */}
+                  <button className="btn btn-ghost btn-sm" style={{ marginTop: '10px', width: '100%', fontSize: '0.8rem' }}
+                    onClick={() => {
+                      if (expandedCard === uni.id) {
+                        setExpandedCard(null);
+                        return;
+                      }
+                      setExpandedCard(uni.id);
+                      if (!explainCache[uni.id]) {
+                        setLoadingExplain(uni.id);
+                        api.explainPathfinderMatch(uni, filters, uni.matchScore)
+                          .then(data => {
+                            setExplainCache(prev => ({ ...prev, [uni.id]: data }));
+                            setLoadingExplain(null);
+                          })
+                          .catch(() => setLoadingExplain(null));
+                      }
+                    }}>
+                    {expandedCard === uni.id ? '▲ Hide Details' : '▼ Why this match?'}
+                  </button>
+
+                  {expandedCard === uni.id && (
+                    <div className="uni-explain animate-fade-in" style={{ marginTop: '12px' }}>
+                      {loadingExplain === uni.id ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          <div className="skeleton-line" style={{ width: '80%', height: '14px' }} />
+                          <div className="skeleton-line" style={{ width: '60%', height: '14px' }} />
+                          <div className="skeleton-line" style={{ width: '90%', height: '14px' }} />
+                        </div>
+                      ) : explainCache[uni.id] ? (
+                        <>
+                          {explainCache[uni.id].probabilityBreakdown && (
+                            <p style={{ fontSize: '0.85rem', marginBottom: '10px', color: 'var(--text-secondary)' }}>
+                              {explainCache[uni.id].probabilityBreakdown}
+                            </p>
+                          )}
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
+                            {(explainCache[uni.id].strengths || []).map((s, j) => (
+                              <span key={j} className="tag tag-emerald" style={{ fontSize: '0.72rem' }}>✓ {s}</span>
+                            ))}
+                            {(explainCache[uni.id].gaps || []).map((g, j) => (
+                              <span key={j} className="tag tag-amber" style={{ fontSize: '0.72rem' }}>⚠ {g}</span>
+                            ))}
+                          </div>
+                          {explainCache[uni.id].boostTip && (
+                            <div style={{ padding: '10px 14px', background: 'rgba(196,147,90,0.08)', border: '1px solid rgba(196,147,90,0.25)', borderRadius: 'var(--radius-md)', fontSize: '0.82rem' }}>
+                              💡 <strong>Boost Tip:</strong> {explainCache[uni.id].boostTip}
+                            </div>
+                          )}
+                        </>
+                      ) : null}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

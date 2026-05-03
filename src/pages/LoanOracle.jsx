@@ -1,4 +1,5 @@
 import { useState, useContext, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../App';
 import { api } from '../utils/api';
 import { formatCurrency } from '../utils/helpers';
@@ -6,7 +7,16 @@ import './LoanOracle.css';
 
 export default function LoanOracle() {
   const { userData } = useContext(AppContext);
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('eligibility');
+  const [showApplyForm, setShowApplyForm] = useState(false);
+  const [selectedLender, setSelectedLender] = useState(null);
+  const [applyForm, setApplyForm] = useState({
+    fullName: '', email: '', phone: '',
+    targetUniversity: '', program: '', duration: '24',
+    loanAmount: '', coApplicantName: '', coApplicantRelation: '', coApplicantEmployment: '',
+    confirmed: false
+  });
 
   // Eligibility state
   const [loanProfile, setLoanProfile] = useState({
@@ -30,6 +40,8 @@ export default function LoanOracle() {
   ]);
   const [inputMsg, setInputMsg] = useState('');
   const [loadingChat, setLoadingChat] = useState(false);
+  const [sessionId] = useState(() => crypto.randomUUID());
+  const [messageCount, setMessageCount] = useState(0);
   const chatEndRef = useRef(null);
 
   // EMI Calculator state
@@ -61,12 +73,33 @@ export default function LoanOracle() {
     setLoadingChat(true);
 
     try {
-      const data = await api.chatLoanOracle(newMessages.slice(1), loanProfile);
+      const userProfile = {
+        dreamScore: userData?.dreamScore,
+        targetCountry: userData?.targetCountries?.[0],
+        familyIncome: userData?.familyIncome,
+        loanAmount: loanProfile.loanAmount,
+        coborrowerIncome: loanProfile.coborrowerIncome,
+        cibilScore: loanProfile.cibilScore,
+        hasCollateral: loanProfile.hasCollateral,
+        universityRanking: loanProfile.universityRanking,
+      };
+      const data = await api.chatLoanOracleWithMemory(inputMsg.trim(), sessionId, userProfile);
       setMessages([...newMessages, { role: 'assistant', content: data.reply }]);
+      setMessageCount(data.messageCount || 0);
     } catch (e) {
       setMessages([...newMessages, { role: 'assistant', content: "I'm having trouble connecting right now. Please try again in a moment." }]);
     }
     setLoadingChat(false);
+  };
+
+  const clearConversation = async () => {
+    try {
+      await api.clearLoanOracleSession(sessionId);
+    } catch (e) { /* non-critical */ }
+    setMessages([
+      { role: 'assistant', content: "Conversation cleared! 🧹 Let's start fresh.\n\nHow can I help you with your education loan today?" }
+    ]);
+    setMessageCount(0);
   };
 
   const calculateEMI = () => {
@@ -236,7 +269,13 @@ export default function LoanOracle() {
                           Approval: <strong style={{ color: lender.approvalChance === 'High' ? 'var(--emerald-light)' : 'var(--amber)' }}>{lender.approvalChance}</strong>
                           {' · '}{lender.processing_days} days
                         </span>
-                        <button className="btn btn-primary btn-sm">Apply →</button>
+                        <button className="btn btn-primary btn-sm" onClick={() => {
+                          setSelectedLender(lender);
+                          setApplyForm(prev => ({ ...prev,
+                            loanAmount: formatCurrency(eligibilityResult.loanDetails.approvedAmount)
+                          }));
+                          setShowApplyForm(true);
+                        }}>Apply →</button>
                       </div>
                     </div>
                   ))}
@@ -266,15 +305,146 @@ export default function LoanOracle() {
           </div>
         )}
 
+        {/* Loan Application Form Overlay */}
+        {showApplyForm && (
+          <div className="loan-content animate-fade-in">
+            <div className="loan-apply-form glass-strong" style={{ padding: '32px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                <div>
+                  <h3>📝 Loan Application</h3>
+                  {selectedLender && (
+                    <p style={{ fontSize: '0.85rem', marginTop: '4px' }}>
+                      Applying with <strong style={{ color: 'var(--emerald-light)' }}>{selectedLender.name}</strong>
+                      {' · '}{selectedLender.personalizedRate}
+                    </p>
+                  )}
+                </div>
+                <button className="btn btn-ghost btn-sm" onClick={() => setShowApplyForm(false)}>✕ Close</button>
+              </div>
+
+              <div className="loan-apply-grid">
+                <div className="input-group">
+                  <label>Full Name *</label>
+                  <input className="input" placeholder="Enter your full name" value={applyForm.fullName}
+                    onChange={e => setApplyForm(p => ({ ...p, fullName: e.target.value }))} />
+                </div>
+                <div className="input-group">
+                  <label>Email *</label>
+                  <input className="input" type="email" placeholder="your@email.com" value={applyForm.email}
+                    onChange={e => setApplyForm(p => ({ ...p, email: e.target.value }))} />
+                </div>
+                <div className="input-group">
+                  <label>Phone *</label>
+                  <input className="input" type="tel" placeholder="+91 98765 43210" value={applyForm.phone}
+                    onChange={e => setApplyForm(p => ({ ...p, phone: e.target.value }))} />
+                </div>
+                <div className="input-group">
+                  <label>Loan Amount</label>
+                  <input className="input" value={applyForm.loanAmount} readOnly style={{ color: 'var(--amber)' }} />
+                </div>
+                <div className="input-group">
+                  <label>Target University *</label>
+                  <input className="input" placeholder="e.g. Georgia Institute of Technology" value={applyForm.targetUniversity}
+                    onChange={e => setApplyForm(p => ({ ...p, targetUniversity: e.target.value }))} />
+                </div>
+                <div className="input-group">
+                  <label>Program *</label>
+                  <input className="input" placeholder="e.g. MS Computer Science" value={applyForm.program}
+                    onChange={e => setApplyForm(p => ({ ...p, program: e.target.value }))} />
+                </div>
+                <div className="input-group">
+                  <label>Duration (months)</label>
+                  <input className="input" type="number" value={applyForm.duration}
+                    onChange={e => setApplyForm(p => ({ ...p, duration: e.target.value }))} />
+                </div>
+                <div className="input-group">
+                  <label>Co-applicant Name *</label>
+                  <input className="input" placeholder="Parent/Guardian name" value={applyForm.coApplicantName}
+                    onChange={e => setApplyForm(p => ({ ...p, coApplicantName: e.target.value }))} />
+                </div>
+                <div className="input-group">
+                  <label>Relationship</label>
+                  <select value={applyForm.coApplicantRelation}
+                    onChange={e => setApplyForm(p => ({ ...p, coApplicantRelation: e.target.value }))}>
+                    <option value="">Select...</option>
+                    <option value="Father">Father</option>
+                    <option value="Mother">Mother</option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Sibling">Sibling</option>
+                    <option value="Guardian">Guardian</option>
+                  </select>
+                </div>
+                <div className="input-group">
+                  <label>Co-applicant Employment</label>
+                  <select value={applyForm.coApplicantEmployment}
+                    onChange={e => setApplyForm(p => ({ ...p, coApplicantEmployment: e.target.value }))}>
+                    <option value="">Select...</option>
+                    <option value="Salaried">Salaried</option>
+                    <option value="Self-Employed">Self-Employed</option>
+                    <option value="Business">Business Owner</option>
+                    <option value="Retired">Retired</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="loan-apply-full" style={{ marginTop: '16px' }}>
+                <label className="checkbox-group quiz-checkbox">
+                  <input type="checkbox" checked={applyForm.confirmed}
+                    onChange={e => setApplyForm(p => ({ ...p, confirmed: e.target.checked }))} />
+                  <span>I confirm the details above are accurate and I consent to share this information with the lender.</span>
+                </label>
+              </div>
+
+              <div className="loan-apply-actions">
+                <button className="btn btn-ghost" onClick={() => setShowApplyForm(false)}>Cancel</button>
+                <button className="btn btn-amber btn-lg"
+                  disabled={!applyForm.confirmed || !applyForm.fullName || !applyForm.email}
+                  onClick={() => {
+                    const year = new Date().getFullYear();
+                    const rand = Math.floor(100000 + Math.random() * 900000);
+                    const applicationId = `GPA-${year}-${rand}`;
+                    setShowApplyForm(false);
+                    navigate('/loan-confirmation', {
+                      state: {
+                        applicationId,
+                        summary: {
+                          name: applyForm.fullName,
+                          university: applyForm.targetUniversity,
+                          loanAmount: applyForm.loanAmount,
+                          lender: selectedLender?.name || 'Not specified',
+                        }
+                      }
+                    });
+                  }}>
+                  🚀 Submit Application
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Chat Tab */}
         {activeTab === 'chat' && (
           <div className="loan-content animate-fade-in">
             <div className="chat-container glass-strong">
               <div className="chat-header">
                 <span style={{ fontSize: '1.3rem' }}>🤖</span>
-                <div>
+                <div style={{ flex: 1 }}>
                   <h4 style={{ fontSize: '0.95rem' }}>LoanOracle AI</h4>
                   <span style={{ fontSize: '0.78rem', color: 'var(--emerald-light)' }}>● Online · Powered by Llama 3.3 70B</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {messageCount > 2 && (
+                    <span className="tag tag-emerald" style={{ fontSize: '0.7rem', animation: 'fadeIn 0.3s ease' }}>
+                      🧠 Memory active
+                    </span>
+                  )}
+                  {messages.length > 1 && (
+                    <button className="btn btn-ghost btn-sm" onClick={clearConversation}
+                      style={{ fontSize: '0.75rem', padding: '4px 10px' }}>
+                      🗑 Clear
+                    </button>
+                  )}
                 </div>
               </div>
 

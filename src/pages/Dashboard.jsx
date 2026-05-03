@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../App';
 import { api } from '../utils/api';
 import { animateValue, getScoreColor } from '../utils/helpers';
+import ShareableScoreCard from '../components/ShareableScoreCard';
+import ScoreLeaderboard from '../components/ScoreLeaderboard';
 import './Dashboard.css';
 
 export default function Dashboard() {
@@ -12,6 +14,7 @@ export default function Dashboard() {
   const [tips, setTips] = useState([]);
   const [growthContent, setGrowthContent] = useState([]);
   const [loadingGrowth, setLoadingGrowth] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   useEffect(() => {
     // Try loading from localStorage
@@ -117,6 +120,10 @@ export default function Dashboard() {
             <div className="tier-actions">
               <Link to="/pathfinder" className="btn btn-primary btn-sm">Find Universities →</Link>
               <Link to="/loans" className="btn btn-ghost btn-sm">Check Loan Eligibility</Link>
+              {dreamScore.totalScore > 0 && (
+                <button className="btn btn-ghost btn-sm" onClick={() => setShowShare(true)}
+                  style={{ borderColor: 'var(--amber)', color: 'var(--amber)' }}>📤 Share Score</button>
+              )}
             </div>
           </div>
         </div>
@@ -145,6 +152,14 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Leaderboard */}
+        <div className="dash-section animate-fade-in-up stagger-2" style={{ marginTop: 0 }}>
+          <ScoreLeaderboard
+            currentScore={dreamScore.totalScore}
+            currentCountry={userData?.targetCountries?.[0]}
+          />
         </div>
 
         {/* Booster Tips */}
@@ -190,6 +205,46 @@ export default function Dashboard() {
               <span className="qa-title">Timeline</span>
               <span className="qa-desc">Application schedule</span>
             </Link>
+            <Link to="/scorebooster" className="quick-action card">
+              <span className="qa-icon">✍️</span>
+              <span className="qa-title">SOP Generator</span>
+              <span className="qa-desc">AI-powered writing</span>
+            </Link>
+            <Link to="/growth" className="quick-action card">
+              <span className="qa-icon">∞</span>
+              <span className="qa-title">GrowthEngine</span>
+              <span className="qa-desc">AI control room</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Referral System */}
+        <div className="dash-section animate-fade-in-up stagger-4" style={{ marginTop: 0 }}>
+          <div className="card" style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: '200px' }}>
+              <h4 style={{ marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                🎁 Refer & Earn
+                <span className="tag tag-amber" style={{ fontSize: '0.72rem' }}>+50 Score</span>
+              </h4>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                Share GradPath AI with a friend — both of you earn <strong style={{ color: 'var(--emerald-light)' }}>+50 Dream Score points</strong> when they complete their quiz!
+              </p>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <code style={{
+                padding: '8px 18px', background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-md)',
+                fontSize: '1rem', fontWeight: 700, color: 'var(--amber)', border: '1px solid rgba(196,147,90,0.3)',
+                letterSpacing: '0.04em'
+              }}>
+                GRAD{Math.random().toString(36).substring(2, 6).toUpperCase()}
+              </code>
+              <button className="btn btn-primary btn-sm" onClick={() => {
+                const code = document.querySelector('.dash-section code');
+                if (code) navigator.clipboard.writeText(code.textContent);
+              }}>
+                📋 Copy
+              </button>
+            </div>
           </div>
         </div>
 
@@ -240,6 +295,15 @@ export default function Dashboard() {
             )}
           </div>
         </div>
+
+        {/* Share Score Modal */}
+        {showShare && (
+          <ShareableScoreCard
+            dreamScore={dreamScore}
+            userData={userData}
+            onClose={() => setShowShare(false)}
+          />
+        )}
       </div>
     </div>
   );

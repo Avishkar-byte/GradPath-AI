@@ -44,4 +44,36 @@ router.get('/universities', (req, res) => {
   res.json(getAllUniversities());
 });
 
+// AI-powered admit probability reasoning
+router.post('/explain', async (req, res) => {
+  try {
+    const { university, userProfile, matchScore } = req.body;
+
+    const completion = await chatWithGroq([{
+      role: 'user',
+      content: `A student has a ${matchScore}% profile match with ${university?.name || 'a university'}'s ${university?.course || 'program'}.
+
+Student: GPA ${userProfile?.gpa || 'N/A'}/10, GRE ${userProfile?.greScore || 'N/A'}, Work exp: ${userProfile?.workYears || 0} years, Field: ${userProfile?.courseType || 'MS'}
+University: Ranked #${university?.ranking || 'N/A'} globally, Acceptance rate: ${university?.acceptance_rate || 'N/A'}%, Tuition: $${university?.tuition || 'N/A'}/yr
+
+Give a response as valid JSON only (no markdown fences):
+{
+  "strengths": ["one specific strength", "another strength"],
+  "gaps": ["one specific gap to address"],
+  "boostTip": "One concrete action that would increase admit odds by 10-15%",
+  "probabilityBreakdown": "One sentence explaining the match score"
+}`
+    }], { maxTokens: 300, temperature: 0.4 });
+
+    try {
+      const cleaned = (completion || '').replace(/```json?\n?/g, '').replace(/```/g, '').trim();
+      res.json(JSON.parse(cleaned));
+    } catch {
+      res.json({ strengths: [], gaps: [], boostTip: '', probabilityBreakdown: completion || '' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 export default router;
