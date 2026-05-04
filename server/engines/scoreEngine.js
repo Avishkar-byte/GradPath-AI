@@ -123,11 +123,11 @@ export function calculateDreamScore(data) {
   );
 
   let tier;
-  if (totalScore >= 901) tier = { name: 'Dream Ready', emoji: '🏆', color: '#c4935a' };
-  else if (totalScore >= 751) tier = { name: 'Top Performer', emoji: '⭐', color: '#4a7c6f' };
-  else if (totalScore >= 551) tier = { name: 'Strong Contender', emoji: '💪', color: '#5a8f4a' };
-  else if (totalScore >= 301) tier = { name: 'Rising Applicant', emoji: '🚀', color: '#7a6b4a' };
-  else tier = { name: 'Early Explorer', emoji: '🌱', color: '#6b6b6b' };
+  if (totalScore >= 901) tier = { name: 'Dream Ready', icon: 'trophy', color: '#c4935a' };
+  else if (totalScore >= 751) tier = { name: 'Top Performer', icon: 'star', color: '#4a7c6f' };
+  else if (totalScore >= 551) tier = { name: 'Strong Contender', icon: 'bolt', color: '#5a8f4a' };
+  else if (totalScore >= 301) tier = { name: 'Rising Applicant', icon: 'rocket', color: '#7a6b4a' };
+  else tier = { name: 'Early Explorer', icon: 'sprout', color: '#6b6b6b' };
 
   return {
     totalScore,

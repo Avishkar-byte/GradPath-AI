@@ -36,7 +36,7 @@ export default function LoanOracle() {
 
   // Chat state
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hi! 👋 I'm LoanOracle, your AI education loan specialist. I can help you understand loan options, check eligibility, and plan your finances.\n\nTell me — which country and program are you considering? I'll help you figure out the best financing path." }
+    { role: 'assistant', content: "Hi! I'm LoanOracle, your AI education loan specialist. I can help you understand loan options, check eligibility, and plan your finances.\n\nTell me — which country and program are you considering? I'll help you figure out the best financing path." }
   ]);
   const [inputMsg, setInputMsg] = useState('');
   const [loadingChat, setLoadingChat] = useState(false);
@@ -59,7 +59,7 @@ export default function LoanOracle() {
       const result = await api.checkLoanEligibility(loanProfile);
       setEligibilityResult(result);
     } catch (e) {
-      console.error(e);
+      /* handled silently */
     }
     setLoadingElig(false);
   };
@@ -97,7 +97,7 @@ export default function LoanOracle() {
       await api.clearLoanOracleSession(sessionId);
     } catch (e) { /* non-critical */ }
     setMessages([
-      { role: 'assistant', content: "Conversation cleared! 🧹 Let's start fresh.\n\nHow can I help you with your education loan today?" }
+      { role: 'assistant', content: "Conversation cleared! Let's start fresh.\n\nHow can I help you with your education loan today?" }
     ]);
     setMessageCount(0);
   };
@@ -119,16 +119,16 @@ export default function LoanOracle() {
     <div className="page loan-page">
       <div className="container">
         <div className="loan-header animate-fade-in-up">
-          <h1>💰 LoanOracle</h1>
+          <h1><svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{verticalAlign:'middle',marginRight:8}}><rect x="3" y="2" width="14" height="16" rx="2" stroke="currentColor" strokeWidth="1.3"/><path d="M7 7H13M7 10H13M7 13H10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>LoanOracle</h1>
           <p>AI-powered education loan advisor. Check eligibility, compare offers, and plan your finances with conversational AI guidance.</p>
         </div>
 
         {/* Tabs */}
         <div className="loan-tabs animate-fade-in-up stagger-1">
           {[
-            { id: 'eligibility', label: '📋 Eligibility Check', },
-            { id: 'chat', label: '💬 AI Advisor' },
-            { id: 'emi', label: '🧮 EMI Calculator' },
+            { id: 'eligibility', label: 'Eligibility Check' },
+            { id: 'chat', label: 'AI Advisor' },
+            { id: 'emi', label: 'EMI Calculator' },
           ].map(tab => (
             <button key={tab.id}
               className={`loan-tab ${activeTab === tab.id ? 'active' : ''}`}
@@ -187,7 +187,7 @@ export default function LoanOracle() {
                 </div>
 
                 <button className="btn btn-amber" onClick={checkEligibility} disabled={loadingElig} style={{ width: '100%' }}>
-                  {loadingElig ? <><span className="spinner" /> Checking...</> : '💰 Check Eligibility'}
+                  {loadingElig ? <><span className="spinner" /> Checking...</> : 'Check Eligibility'}
                 </button>
               </div>
 
@@ -197,8 +197,8 @@ export default function LoanOracle() {
                   {/* Eligibility Status */}
                   <div className="card" style={{ padding: '24px', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                      <span style={{ fontSize: '2rem' }}>
-                        {eligibilityResult.eligibility.eligible ? '✅' : eligibilityResult.eligibility.conditionallyEligible ? '⚠️' : '❌'}
+                      <span style={{ fontSize: '1.5rem', display: 'flex', alignItems: 'center' }}>
+                        {eligibilityResult.eligibility.eligible ? <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--teal)" strokeWidth="1.5"/><path d="M7 12L10.5 15.5L17 8.5" stroke="var(--teal)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg> : eligibilityResult.eligibility.conditionallyEligible ? <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L22 20H2L12 2Z" stroke="var(--gold)" strokeWidth="1.5" strokeLinejoin="round"/><path d="M12 9V13" stroke="var(--gold)" strokeWidth="1.5" strokeLinecap="round"/><circle cx="12" cy="16" r="0.8" fill="var(--gold)"/></svg> : <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--error)" strokeWidth="1.5"/><path d="M8 8L16 16M16 8L8 16" stroke="var(--error)" strokeWidth="1.8" strokeLinecap="round"/></svg>}
                       </span>
                       <div>
                         <h4 style={{ color: eligibilityResult.eligibility.eligible ? 'var(--emerald-light)' : 'var(--amber)' }}>
@@ -241,7 +241,7 @@ export default function LoanOracle() {
                   </div>
 
                   {/* Lender Offers */}
-                  <h4 style={{ marginBottom: '12px' }}>💎 Personalized Lender Offers</h4>
+                  <h4 style={{ marginBottom: '12px' }}>Personalized Lender Offers</h4>
                   {eligibilityResult.lenders.map((lender, i) => (
                     <div key={i} className="card lender-card" style={{ padding: '20px', marginBottom: '12px' }}>
                       <div className="lender-header">
@@ -282,7 +282,7 @@ export default function LoanOracle() {
 
                   {/* Document Checklist */}
                   <div className="card" style={{ padding: '24px', marginTop: '16px' }}>
-                    <h4 style={{ marginBottom: '16px' }}>📋 Document Checklist</h4>
+                    <h4 style={{ marginBottom: '16px' }}>Document Checklist</h4>
                     {Object.entries(eligibilityResult.documents).map(([cat, docs]) => (
                       <div key={cat} style={{ marginBottom: '12px' }}>
                         <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
@@ -311,7 +311,7 @@ export default function LoanOracle() {
             <div className="loan-apply-form glass-strong" style={{ padding: '32px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <div>
-                  <h3>📝 Loan Application</h3>
+                  <h3>Loan Application</h3>
                   {selectedLender && (
                     <p style={{ fontSize: '0.85rem', marginTop: '4px' }}>
                       Applying with <strong style={{ color: 'var(--emerald-light)' }}>{selectedLender.name}</strong>
@@ -319,7 +319,7 @@ export default function LoanOracle() {
                     </p>
                   )}
                 </div>
-                <button className="btn btn-ghost btn-sm" onClick={() => setShowApplyForm(false)}>✕ Close</button>
+                <button className="btn btn-ghost btn-sm" onClick={() => setShowApplyForm(false)}><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2L10 10M10 2L2 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg> Close</button>
               </div>
 
               <div className="loan-apply-grid">
@@ -416,7 +416,7 @@ export default function LoanOracle() {
                       }
                     });
                   }}>
-                  🚀 Submit Application
+                  Submit Application
                 </button>
               </div>
             </div>
@@ -428,21 +428,21 @@ export default function LoanOracle() {
           <div className="loan-content animate-fade-in">
             <div className="chat-container glass-strong">
               <div className="chat-header">
-                <span style={{ fontSize: '1.3rem' }}>🤖</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{flexShrink:0}}><rect x="3" y="5" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.3"/><circle cx="7.5" cy="10" r="1.2" stroke="currentColor" strokeWidth="1"/><circle cx="12.5" cy="10" r="1.2" stroke="currentColor" strokeWidth="1"/><path d="M10 2V5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/><path d="M8 2H12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>
                 <div style={{ flex: 1 }}>
                   <h4 style={{ fontSize: '0.95rem' }}>LoanOracle AI</h4>
-                  <span style={{ fontSize: '0.78rem', color: 'var(--emerald-light)' }}>● Online · Powered by Llama 3.3 70B</span>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--teal)' }}><span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--success)', marginRight: '4px', verticalAlign: 'middle' }} /> Online · Powered by Llama 3.3 70B</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   {messageCount > 2 && (
                     <span className="tag tag-emerald" style={{ fontSize: '0.7rem', animation: 'fadeIn 0.3s ease' }}>
-                      🧠 Memory active
+                      Memory active
                     </span>
                   )}
                   {messages.length > 1 && (
                     <button className="btn btn-ghost btn-sm" onClick={clearConversation}
                       style={{ fontSize: '0.75rem', padding: '4px 10px' }}>
-                      🗑 Clear
+                      Clear
                     </button>
                   )}
                 </div>
@@ -451,18 +451,18 @@ export default function LoanOracle() {
               <div className="chat-messages">
                 {messages.map((msg, i) => (
                   <div key={i} className={`chat-msg ${msg.role}`}>
-                    {msg.role === 'assistant' && <span className="chat-avatar">🤖</span>}
+                    {msg.role === 'assistant' && <span className="chat-avatar"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="2" stroke="currentColor" strokeWidth="1.2"/><circle cx="5.5" cy="8" r="1" stroke="currentColor" strokeWidth="0.9"/><circle cx="10.5" cy="8" r="1" stroke="currentColor" strokeWidth="0.9"/><path d="M8 1.5V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg></span>}
                     <div className="chat-bubble">
                       {msg.content.split('\n').map((line, j) => (
                         <p key={j} style={{ marginBottom: line ? '6px' : '0' }}>{line}</p>
                       ))}
                     </div>
-                    {msg.role === 'user' && <span className="chat-avatar">👤</span>}
+                    {msg.role === 'user' && <span className="chat-avatar"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="currentColor" strokeWidth="1.2"/><path d="M2.5 14C2.5 11 4.5 9 8 9C11.5 9 13.5 11 13.5 14" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg></span>}
                   </div>
                 ))}
                 {loadingChat && (
                   <div className="chat-msg assistant">
-                    <span className="chat-avatar">🤖</span>
+                    <span className="chat-avatar"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="2" stroke="currentColor" strokeWidth="1.2"/><circle cx="5.5" cy="8" r="1" stroke="currentColor" strokeWidth="0.9"/><circle cx="10.5" cy="8" r="1" stroke="currentColor" strokeWidth="0.9"/><path d="M8 1.5V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg></span>
                     <div className="chat-bubble typing">
                       <span className="typing-dot" /><span className="typing-dot" /><span className="typing-dot" />
                     </div>

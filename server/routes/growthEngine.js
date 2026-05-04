@@ -11,7 +11,7 @@ router.post('/generate-content', async (req, res) => {
     if (type === 'nudge') {
       const prompt = `Generate a WhatsApp-style nudge message for a student ${profile?.stage || 'exploring study abroad options'}. The message should be friendly, encouraging, and include an emoji. Keep it under 40 words. Just return the message text.`;
       const msg = await chatWithGroq([{ role: 'user', content: prompt }], { temperature: 0.8, maxTokens: 100 });
-      content = { type: 'nudge', message: msg || "Hey! 🎓 Your Dream Score is waiting — take 2 minutes to improve it today and unlock better university matches!", timestamp: new Date().toISOString() };
+      content = { type: 'nudge', message: msg || "Hey! Your Dream Score is waiting — take 2 minutes to improve it today and unlock better university matches!", timestamp: new Date().toISOString() };
     } else if (type === 'blog') {
       const prompt = `Write a concise blog post snippet (title + 2 paragraph preview) about education loan tips for Indian students planning to study abroad. Make it actionable and insightful. Format: {"title": "...", "preview": "...", "readTime": "X min"}`;
       const msg = await chatWithGroq([{ role: 'user', content: prompt }], { temperature: 0.7, maxTokens: 300 });

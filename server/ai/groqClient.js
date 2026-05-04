@@ -1,13 +1,13 @@
 import Groq from 'groq-sdk';
-import dotenv from 'dotenv';
-dotenv.config();
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+export const GROQ_MODEL = 'llama-3.3-70b-versatile';
 
 export async function chatWithGroq(messages, options = {}) {
   try {
     const completion = await groq.chat.completions.create({
-      model: options.model || 'llama-3.3-70b-versatile',
+      model: options.model || GROQ_MODEL,
       messages,
       temperature: options.temperature || 0.7,
       max_tokens: options.maxTokens || 1024,
@@ -16,7 +16,7 @@ export async function chatWithGroq(messages, options = {}) {
     });
     return completion.choices[0]?.message?.content || '';
   } catch (error) {
-    console.error('Groq API error:', error.message);
+    console.error('[Groq]', error.message);
     return null;
   }
 }
@@ -24,7 +24,7 @@ export async function chatWithGroq(messages, options = {}) {
 export async function streamWithGroq(messages, options = {}) {
   try {
     const stream = await groq.chat.completions.create({
-      model: options.model || 'llama-3.3-70b-versatile',
+      model: options.model || GROQ_MODEL,
       messages,
       temperature: options.temperature || 0.7,
       max_tokens: options.maxTokens || 1024,
@@ -33,7 +33,7 @@ export async function streamWithGroq(messages, options = {}) {
     });
     return stream;
   } catch (error) {
-    console.error('Groq Stream error:', error.message);
+    console.error('[GroqStream]', error.message);
     return null;
   }
 }

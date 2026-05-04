@@ -14,21 +14,21 @@ export function formatNumber(num) {
 }
 
 export function getCountryFlag(country) {
-  const flags = {
-    'USA': '🇺🇸', 'UK': '🇬🇧', 'Canada': '🇨🇦', 'Germany': '🇩🇪',
-    'Australia': '🇦🇺', 'France': '🇫🇷', 'Switzerland': '🇨🇭',
-    'Netherlands': '🇳🇱', 'Sweden': '🇸🇪', 'Singapore': '🇸🇬',
-    'India': '🇮🇳', 'Japan': '🇯🇵', 'South Korea': '🇰🇷'
+  const codes = {
+    'USA': 'US', 'UK': 'GB', 'Canada': 'CA', 'Germany': 'DE',
+    'Australia': 'AU', 'France': 'FR', 'Switzerland': 'CH',
+    'Netherlands': 'NL', 'Sweden': 'SE', 'Singapore': 'SG',
+    'India': 'IN', 'Japan': 'JP', 'South Korea': 'KR'
   };
-  return flags[country] || '🌍';
+  return codes[country] || '';
 }
 
 export function getScoreColor(score) {
-  if (score >= 901) return '#c4935a';
-  if (score >= 751) return '#4a7c6f';
-  if (score >= 551) return '#5a8f4a';
-  if (score >= 301) return '#7a6b4a';
-  return '#6b6b6b';
+  if (score >= 901) return '#C9A96E';
+  if (score >= 751) return '#2DD4BF';
+  if (score >= 551) return '#10B981';
+  if (score >= 301) return '#8A6E42';
+  return '#4A5568';
 }
 
 export function delay(ms) {

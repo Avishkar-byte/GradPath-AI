@@ -171,7 +171,7 @@
   border-radius: 50%;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .tl-setup { padding: 20px; }
-  .tl-setup > div { grid-template-columns: 1fr !important; }
+  .timeline-page .tl-setup > div { grid-template-columns: 1fr; }
 }

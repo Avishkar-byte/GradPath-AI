@@ -54,7 +54,7 @@ function getDefaultTimeline(intake) {
     { month: 'Jan-Feb 2026', tasks: [{ title: 'Admission Decisions', description: 'Receive remaining admission decisions', priority: 'high', category: 'application' }, { title: 'Apply for Education Loan', description: 'Begin loan application process', priority: 'high', category: 'financial' }] },
     { month: 'Mar-Apr 2026', tasks: [{ title: 'Accept Offer', description: 'Choose university and accept admission', priority: 'high', category: 'application' }, { title: 'Loan Disbursement', description: 'Complete loan documentation', priority: 'high', category: 'financial' }] },
     { month: 'May-Jun 2026', tasks: [{ title: 'Visa Application', description: 'Apply for student visa with all documents', priority: 'high', category: 'visa' }, { title: 'Pre-departure Prep', description: 'Book flights, arrange accommodation', priority: 'medium', category: 'prep' }] },
-    { month: 'Jul-Aug 2026', tasks: [{ title: 'Depart! 🎉', description: 'Begin your study abroad journey', priority: 'high', category: 'prep' }] }
+    { month: 'Jul-Aug 2026', tasks: [{ title: 'Depart!', description: 'Begin your study abroad journey', priority: 'high', category: 'prep' }] }
   ];
 }
 

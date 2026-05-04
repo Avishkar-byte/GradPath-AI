@@ -1,213 +1,130 @@
-<div align="center">
+# GradPath AI
 
-# 🎓 GradPath AI
+An AI-powered study abroad companion for Indian students. GradPath helps students discover universities, optimize their profiles, navigate education loans, and plan their journey — all through a unified, intelligent platform.
 
-### *Your Education Journey, Supercharged*
-
-**AI-First Student Engagement Ecosystem for Education Discovery & Financing**
-
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Now-4a7c6f?style=for-the-badge)](https://gradpath-ai.vercel.app)
-![Tech Stack](https://img.shields.io/badge/Stack-React_+_Node_+_Groq-c4935a?style=for-the-badge)
-![AI Powered](https://img.shields.io/badge/AI-Llama_3.3_70B-5a9a88?style=for-the-badge)
+Built for TenzorX Hackathon 2025
 
 ---
 
-*An AI-powered platform that guides Indian students through university discovery, application planning, and education loan financing — with 4 specialized AI agents and a gamified Dream Score system.*
+## Architecture
 
-</div>
+- **Frontend** — React 19, Vite, React Router 7, Vanilla CSS
+- **Backend** — Node.js, Express.js
+- **AI** — Groq SDK (Llama 3.3 70B) for high-speed inference and streaming
+- **Database** — Supabase (PostgreSQL)
+- **Deployment** — Vercel (frontend), Render (backend)
 
----
+## Core Engines
 
-## 🌟 What Makes GradPath AI Different
+| Engine | Responsibility |
+|---|---|
+| ScoreEngine | Computes Dream Score (0–1000) across 5 weighted pillars |
+| RecEngine | Cosine similarity university matching from 55+ programs |
+| LoanEngine | NBFC loan eligibility, interest rate calculation, EMI simulation |
+| ROIEngine | Break-even analysis and 10-year salary projections |
 
-Existing platforms (Yocket, LeapScholar, GradRight) are essentially **directories with a chatbot bolted on**. GradPath AI's differentiator:
+## Features
 
-| Feature | Competitors | GradPath AI |
-|---------|------------|-------------|
-| Architecture | Monolithic chatbot | **4 Specialized AI Agents** |
-| Engagement | Static profiles | **Dream Score (0-1000)** gamification |
-| Loan Integration | Separate portals | **Seamless LoanOracle** conversation |
-| Personalization | Basic filtering | **Cosine similarity matching** |
-| Growth | Manual marketing | **Zero-human AI growth loop** |
+- **PathFinder** — AI-driven university discovery and profile matching
+- **LoanOracle** — Conversational loan advisor with memory, eligibility check, and application flow
+- **ScoreBooster** — Live SOP generation with streaming and AI review
+- **GrowthEngine** — Autonomous user acquisition and engagement loop
+- **Dream Score** — Gamified readiness score driving daily engagement
+- **Referral System** — Viral loop with score rewards
 
----
+## Getting Started
 
-## 🏗️ Architecture
+### Prerequisites
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    GradPath AI Platform                   │
-├─────────────────┬───────────────────┬───────────────────┤
-│   🧭 PathFinder │   💰 LoanOracle   │   ⚡ ScoreBooster │
-│   University     │   Loan Eligibility │   AI Tips &       │
-│   Matching AI    │   & Chat AI        │   Recommendations │
-├─────────────────┴───────────────────┴───────────────────┤
-│                  ✦ Dream Score Engine                     │
-│            Rule-based 0-1000 readiness scoring           │
-├─────────────────────────────────────────────────────────┤
-│              🤖 GrowthEngine (Bonus)                     │
-│     Zero-human intervention content & nudge generation   │
-├─────────────────────────────────────────────────────────┤
-│                     AI Layer                             │
-│     Groq (Llama 3.3 70B) · Cosine Similarity · Rules    │
-├─────────────────────────────────────────────────────────┤
-│                    Data Layer                            │
-│    55+ Universities · NBFC Rules · Salary Benchmarks    │
-└─────────────────────────────────────────────────────────┘
-```
+- Node.js 18+
+- A Groq API key (free at [console.groq.com](https://console.groq.com))
+- A Supabase project (free at [supabase.com](https://supabase.com)) — optional
 
----
+### Setup
 
-## ✦ Core Features
-
-### 1. Dream Score (0-1000) — The Stickiness Engine
-> *A gamified readiness number that students obsessively want to improve*
-
-<table>
-<tr>
-<td width="50%">
-
-- **5 Weighted Pillars**: Academic (25%), Financial (25%), Profile (20%), Alignment (15%), Progress (15%)
-- **Tier System**: Early Explorer → Rising Applicant → Strong Contender → Top Performer → Dream Ready
-- **Streak Counter**: Daily engagement tracking
-- **ScoreBooster Tips**: AI-generated actions with point predictions
-
-</td>
-<td width="50%">
-
-```
-Tier Breakdown:
-🌱 0-300   Early Explorer
-🚀 301-550 Rising Applicant
-💪 551-750 Strong Contender
-⭐ 751-900 Top Performer
-🏆 901-1000 Dream Ready
-```
-
-</td>
-</tr>
-</table>
-
-### 2. 🧭 PathFinder — AI University Matching
-- **Cosine similarity** matching against 55+ university programs
-- **11 countries**: USA, UK, Canada, Germany, Australia, Singapore, Switzerland, Netherlands, Sweden, France, India
-- **Match categories**: Safe / Moderate / Ambitious
-- **AI Insights**: Groq-powered personalized narratives for top matches
-
-### 3. 💰 LoanOracle — Conversational Loan AI
-- **Eligibility Engine**: NBFC rule-based assessment (age, CIBIL, income, collateral)
-- **Dynamic Interest Rates**: 9.5% - 14.5% based on profile strength
-- **3 Lender Offers**: Personalized rate comparisons
-- **EMI Calculator**: Interactive slider with repayment scenario visualization
-- **Document Checklist**: Auto-generated based on loan type
-- **AI Chat**: Groq-powered conversational loan guidance
-
-### 4. 📊 ROI Calculator
-- **Cost vs Earnings**: Visual break-even analysis over 10 years
-- **Salary Projections**: Year 1/3/5/10 with field-specific growth curves
-- **INR Conversion**: Real-time with embedded exchange rates
-- **Country-specific Data**: Living costs, visa fees, work permits for 11 countries
-
-### 5. 📅 Application Timeline
-- **AI-generated** month-by-month roadmap using Groq LLM
-- **Interactive Checkpoints**: Click to mark tasks as complete
-- **Priority System**: High/Medium/Low with visual indicators
-- **Progress Tracking**: Overall completion percentage
-
-### 6. 🤖 GrowthEngine (Bonus — Zero Human Loop)
-- **Smart Nudges**: AI-generated WhatsApp-style engagement messages
-- **Blog Generation**: Auto-created content snippets
-- **Referral Engine**: Dynamic codes with Dream Score point rewards
-- Demonstrates full **acquisition → engagement → conversion** lifecycle managed by AI
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **Frontend** | React + Vite | Fast SPA with hot reload |
-| **Styling** | Vanilla CSS | Premium dark theme, glassmorphism, micro-animations |
-| **Backend** | Express.js (Node) | REST API with 6 route modules |
-| **Primary LLM** | Groq (Llama 3.3 70B) | ~500 tok/sec chat responses |
-| **Recommendation** | Cosine Similarity | Vector matching on JSON dataset |
-| **Scoring** | Rule-based Engine | Deterministic, explainable Dream Score |
-| **Loan Engine** | NBFC Rule Engine | EMI, eligibility, interest rate calculation |
-| **Deployment** | Vercel + Render | Frontend + Backend hosting |
-
----
-
-## 🚀 Quick Start
-
+1. Clone the repository
 ```bash
-# Clone
-git clone https://github.com/YOUR_USERNAME/gradpath-ai.git
-cd gradpath-ai
+git clone https://github.com/Avishkar-byte/GradPath-AI.git
+cd GradPath-AI
+```
 
-# Install
+2. Install dependencies
+```bash
 npm install
+```
 
-# Configure
+3. Configure environment variables
+```bash
 cp .env.example .env
-# Add your GROQ_API_KEY to .env
+# Fill in your GROQ_API_KEY and other values
+```
 
-# Run (starts both frontend + backend)
+4. Run in development
+```bash
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173)
+- Frontend: http://localhost:5173
+- Backend: http://localhost:3001
 
----
+### Environment Variables
 
-## 📁 Project Structure
+See `.env.example` for all required variables.
+
+| Variable | Description |
+|---|---|
+| `GROQ_API_KEY` | Groq API key for AI inference |
+| `PORT` | Server port (default: 3001) |
+| `FRONTEND_URL` | Production frontend URL for CORS |
+| `VITE_API_URL` | Backend API URL for the client |
+| `VITE_SUPABASE_URL` | Supabase project URL |
+| `VITE_SUPABASE_ANON_KEY` | Supabase anonymous key |
+
+## Project Structure
 
 ```
-├── server/                    # Express.js Backend
-│   ├── ai/groqClient.js       # Groq API wrapper
-│   ├── engines/
-│   │   ├── scoreEngine.js     # Dream Score calculator
-│   │   ├── recEngine.js       # Cosine similarity recommender
-│   │   ├── loanEngine.js      # NBFC loan rule engine
-│   │   └── roiEngine.js       # ROI computation
-│   ├── routes/                # 6 API route modules
-│   └── data/                  # University, loan, salary datasets
-├── src/                       # React Frontend
-│   ├── pages/                 # 7 page components
-│   ├── components/            # Reusable UI components
-│   ├── utils/                 # API client, helpers
-│   └── index.css              # Design system
-└── index.html                 # Entry point with SEO meta
+gradpath-ai/
+├── public/                     # Static assets
+├── src/                        # React frontend
+│   ├── components/             # Reusable UI components
+│   ├── lib/                    # Third-party client setup
+│   ├── pages/                  # One file per route
+│   ├── utils/                  # Pure utility functions
+│   ├── App.jsx                 # Router + context
+│   ├── main.jsx                # Entry point
+│   └── index.css               # Design system + global styles
+├── server/                     # Express backend
+│   ├── ai/                     # Groq client setup
+│   ├── engines/                # Computation engines
+│   ├── routes/                 # Route handlers
+│   ├── data/                   # JSON datasets
+│   ├── middleware/             # Express middleware
+│   └── index.js                # Server entry point
+├── .env.example
+├── .gitignore
+├── package.json
+└── vite.config.js
 ```
 
----
+## Deployment
 
-## 🎯 Judging Criteria Coverage
+**Frontend (Vercel)**
+- Connect the repository to a Vercel project
+- Set framework preset to Vite
+- Add all `VITE_` prefixed environment variables in Vercel dashboard
 
-| Criteria | How We Deliver |
-|----------|---------------|
-| **Innovation & Creativity** | Dream Score gamification + 4-agent architecture — no competitor has this |
-| **AI Integration & Execution** | Groq LLM chat, cosine similarity recs, rule-based scoring, AI content gen |
-| **User Experience** | Premium dark UI, animated score ring, glassmorphism, micro-interactions, streaks |
-| **Business Relevance** | Clear funnel: Dream Score → PathFinder → LoanOracle → Loan Application |
-| **Prototype Quality** | Full-stack working demo with all flows functional end-to-end |
-| **Bonus: Zero-Human Loop** | GrowthEngine panel: auto-generated nudges, blogs, referrals |
+**Backend (Render)**
+- Connect the repository to a Render web service
+- Set start command to `node server/index.js`
+- Add `GROQ_API_KEY`, `PORT`, and `FRONTEND_URL` in Render dashboard
 
----
+## Known Limitations
 
-## 📊 Data Coverage
+- University dataset covers 55 programs across 11 countries. A production version would require a live database integration.
+- Loan eligibility is rule-based, not connected to live NBFC APIs.
+- Conversation sessions are stored in server memory and reset on server restart. A Redis layer would be needed for production.
+- Supabase integration is optional — the app gracefully falls back to mock data when not configured.
 
-- **55+ University Programs** across MS CS, MBA, Data Science, Engineering
-- **11 Countries** with living costs, visa fees, work permit details
-- **3 Simulated Lenders** with NBFC-realistic criteria
-- **Salary Progressions** by field (CS, MBA, Data Science, Engineering)
-- **Exchange Rates** for USD, GBP, EUR, CAD, AUD, CHF, SGD, SEK, INR
+## License
 
----
-
-<div align="center">
-
-### Built with 🤖 AI-first thinking for the future of education
-
-**GradPath AI** — Awareness → Engagement → Trust → Conversion
-
-</div>
+MIT
